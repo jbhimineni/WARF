@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Update Host IP</title>
+    <style>
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Full-screen background image */
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('https://via.placeholder.com/1920x1080.png?text=Update+Host+IP') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Overlay for the background image */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6); /* Dark overlay */
+        }
+
+        /* Form container */
+        .form-container {
+            position: relative;
+            background-color: rgba(255, 255, 255, 0.9); /* White background with transparency */
+            border-radius: 10px;
+            padding: 40px;
+            width: 500px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Error banner */
+        #errorBanner {
+            color: red;
+            background-color: #f8d7da;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #f5c6cb;
+            display: none;
+        }
+
+        /* Table style */
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f1f1f1;
+            color: #333;
+        }
+
+        td {
+            background-color: #fff;
+        }
+
+        /* Input field and select styling */
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        /* Submit button styling */
+        button[type="submit"] {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px; /* Add margin to give space above the button */
+        }
+
+        button[type="submit"]:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #218838;
+        }
+
+        /* Centering the submit button */
+        .submit-btn-cell {
+            text-align: center; /* Center the content horizontally */
+            colspan: 2; /* Ensure the button spans the entire width */
+        }
+
+        /* Link styling */
+        a {
+            color: #007bff;
+            text-decoration: none;
+            margin-top: 20px;
+            display: block;
+            font-size: 16px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Success banner styles */
+        .success-banner {
+            background-color: #28a745; /* Green background for success */
+            color: white; /* White text color */
+            padding: 15px 20px; /* Spacing around the content */
+            border-radius: 8px; /* Rounded corners */
+            font-size: 16px; /* Font size */
+            max-width: 90%; /* Limit width to fit smaller screens */
+            margin: 20px auto; /* Center the banner */
+            text-align: center; /* Center text */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Smooth transition */
+            transform: translateY(-20px); /* Start slightly above */
+            opacity: 0; /* Start invisible */
+        }
+
+        /* Fade in and move down animation when displayed */
+        .success-banner.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Optional: add a little animation for the span to highlight the ID */
+        .success-banner span {
+            font-weight: bold;
+            text-decoration: underline;
+        }
+    </style>
+    <script>
+        // Function to validate the host input
+        function validateHost() {
+            const hostInput = document.getElementById('host');
+            const submitButton = document.querySelector('button[type="submit"]');
+            const errorBanner = document.getElementById('errorBanner');
+            const hostValue = hostInput.value.trim();
+            const isValid = /^[a-zA-Z0-9.]+$/.test(hostValue) && hostValue.includes('.');
+            submitButton.disabled = !isValid;
+            if (isValid) {
+                errorBanner.style.display = 'none';
+            } else {
+                errorBanner.style.display = 'block';
+            }
+        }
+
+        // Show success banner after page loads if hostId is present
+        window.addEventListener('DOMContentLoaded', function() {
+            const successBanner = document.querySelector('.success-banner');
+            if (successBanner) {
+                successBanner.classList.add('show'); // Show the banner
+            }
+        });
+    </script>
+</head>
+
+<body>
+<!-- Overlay for the background -->
+<div class="overlay"></div>
+
+<!-- Form container -->
+<div class="form-container">
+    <h2>Update Host IP</h2>
+
+    <!-- Error message banner -->
+    <div id="errorBanner">Invalid IP format! Enter a valid IP for the status update</div>
+
+    <form action="/ipupdate" onsubmit="handleFormSubmit(event)" method="POST">
+        <table>
+            <tr>
+                <td>
+                    <label for="host">Host IP or Domain:</label>
+                </td>
+                <td>
+                    <input type="text" id="host" name="hostIP" required oninput="validateHost()">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="option">Choose Option:</label>
+                </td>
+                <td>
+                    <select id="option" name="status" required>
+                        <option value="BLOCKED" style="color: red;">Block</option>
+                        <option value="SUSPECT" style="color: orange;">Suspect</option>
+                    </select>
+                </td>
+            </tr>
+            <!-- Centered submit button -->
+            <tr class="submit-btn-cell">
+                <td colspan="2">
+                    <button type="submit" disabled>Submit</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <!-- Success banner with the hostId -->
+    <div th:if="${hostId}">
+        <div class="success-banner">
+            <p>HostIP updated successful!<br> The ID for IP is: <span th:text="${hostId}"></span></p>
+        </div>
+    </div>
+
+    <!-- Back to Home link -->
+    <a href="/">Back to Home</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home page</title>
+    <style>
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Full-screen background image */
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('https://via.placeholder.com/1920x1080.png?text=COPM+898') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Arial', sans-serif;
+            color: white; /* Make the text white for better contrast */
+        }
+
+        /* Overlay for the background image */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6); /* Dark overlay */
+        }
+
+        /* Container for centered content */
+        .content-container {
+            position: relative;
+            z-index: 1; /* Ensure content appears above the overlay */
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 20px; /* Add some space below the heading */
+        }
+
+        /* Link styling */
+        .action-link {
+            font-size: 1.5rem;
+            color: #28a745; /* Green color for the link */
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: rgba(40, 167, 69, 0.2); /* Slight green background */
+            transition: background-color 0.3s ease;
+            margin: 10px; /* Add space between links */
+            display: inline-block; /* Make links appear side by side */
+        }
+
+        .action-link:hover {
+            background-color: rgba(40, 167, 69, 0.4); /* Darker green background on hover */
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+<!-- Overlay for the background -->
+<div class="overlay"></div>
+
+<!-- Content container -->
+<div class="content-container">
+    <h1>Welcome to Manage Host Address</h1>
+
+    <!-- Search link to get IP -->
+    <a href="/getHostId" class="action-link">Search IP</a>
+
+    <!-- Update Host IP link -->
+    <a href="/ipupdate" class="action-link">Update Host IP</a>
+
+    <a href="/loadData" class="action-link">Employee Data App</a>
+
+</div>
+</body>
+</html>

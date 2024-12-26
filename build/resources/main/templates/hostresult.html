@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Host IP Search</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Ensure the body takes full height */
+        html, body {
+            height: 100%;
+        }
+        .content-wrapper {
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .content {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+<div class="content-wrapper">
+    <div class="container content">
+        <h1 class="mt-4">Search Host IP</h1>
+
+        <!-- Form to search for a Host IP -->
+        <form action="/getHostId" method="post" class="mt-4">
+            <div class="form-group">
+                <label for="hostIp">Enter Host IP:</label>
+                <input type="text" id="hostIp" name="hostIp" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+
+        <!-- Display results if an address book entity is found -->
+        <div th:if="${addressBookEntity != null}" class="mt-4">
+            <h3>Results for Host IP: <span th:text="${hostIp}"></span></h3>
+
+            <!-- Table to display the result -->
+            <table class="table table-bordered mt-4">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Host IP</th>
+                    <th>Status</th>
+                    <th>Updated Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${addressBookEntity.id}"></td>
+                    <td th:text="${addressBookEntity.hostIP}"></td>
+                    <td th:text="${addressBookEntity.status}"></td>
+                    <td th:text="${addressBookEntity.updatedDate}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Display message if no results found -->
+        <div th:if="${addressBookEntity == null}" class="mt-4">
+            <p>No data found for the provided Host IP.</p>
+        </div>
+    </div>
+
+    <!-- Back to Home Button -->
+    <div class="d-flex justify-content-center mt-4 mb-4">
+        <a href="/" class="btn btn-secondary btn-sm">Back to Home</a>
+    </div>
+</div>
+
+<!-- Optional: JavaScript for Bootstrap components -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

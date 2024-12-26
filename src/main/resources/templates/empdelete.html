@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Employee</title>
+    <script>
+        // This function handles the form submission and displays success or error messages
+        async function deleteEmployee(event) {
+            event.preventDefault();  // Prevent the default form submission behavior
+
+            const empId = document.getElementById('empUser').value;
+            const resultMessage = document.getElementById('resultMessage');
+
+            try {
+                // Sending DELETE request to the backend with the empId
+                const response = await fetch(`/empdelete?empUser=${empId}`, {
+                    method: 'DELETE',  // Using DELETE method
+                });
+
+                // Check the response status
+                if (response.ok) {
+                    // Successful deletion (HTTP 200)
+                    resultMessage.style.color = "green";
+                    resultMessage.textContent = "Record has been deleted successfully!";
+                } else {
+                    // Handle failure (HTTP 404, etc.)
+                    resultMessage.style.color = "red";
+                    const errorText = await response.text(); // Get error message from response
+                    resultMessage.textContent = errorText || "Error deleting record!";
+                }
+            } catch (error) {
+                // Network or other unexpected error
+                resultMessage.style.color = "red";
+                resultMessage.textContent = "Error occurred while deleting record!";
+            }
+        }
+    </script>
+</head>
+<body>
+
+<h2>Delete Employee Record</h2>
+
+<form id="deleteForm" onsubmit="deleteEmployee(event)">
+    <label for="empUser">Employee Username:</label>
+    <input type="text" id="empUser" name="empUser" required />
+    <button type="submit">Delete</button>
+</form>
+
+<p id="resultMessage"></p> <!-- This will display the success or error message -->
+
+<a href="/getemp" class="action-link">Back to Employee Finder</a><br><br>
+
+</body>
+</html>
